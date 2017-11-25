@@ -7,8 +7,8 @@ environment:
     - PlatformToolset: v140_xp
 
 platform:
-    - x64
-    - x86
+    #- x64
+    #- x86
     - PureDotNet
 
 configuration:
@@ -21,15 +21,13 @@ install:
     - call "C:\Program Files (x86)\Microsoft Visual Studio 14.0\VC\vcvarsall.bat" %archi%
     - if "%platform%"=="PureDotNet" nuget restore "%APPVEYOR_BUILD_FOLDER%"\PoorMansTSqlFormatterJSLib\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\packages
     - if "%platform%"=="PureDotNet" nuget restore "%APPVEYOR_BUILD_FOLDER%"\PoorMansTSqlFormatterTest\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\packages
+    - nuget restore "%APPVEYOR_BUILD_FOLDER%"\PoorMansTSqlFormatterVSPackage\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\packages
+    - nuget restore "%APPVEYOR_BUILD_FOLDER%"\PoorMansTSqlFormatterSSMSPackage\packages.config -PackagesDirectory "%APPVEYOR_BUILD_FOLDER%"\packages
 
-
-build:
-    parallel: true                  # enable MSBuild parallel builds
-    verbosity: minimal
 
 build_script:
     - cd "%APPVEYOR_BUILD_FOLDER%"
-    - msbuild PoorMansTSqlFormatter.sln /p:configuration="%configuration%" /p:platform="%platform%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
+    - msbuild PoorMansTSqlFormatter.sln /m /p:configuration="%configuration%" /p:platform="%platform%" /p:PlatformToolset="%PlatformToolset%" /logger:"C:\Program Files\AppVeyor\BuildAgent\Appveyor.MSBuildLogger.dll"
 
 after_build:
     - cd "%APPVEYOR_BUILD_FOLDER%"
